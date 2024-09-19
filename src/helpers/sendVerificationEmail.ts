@@ -8,13 +8,14 @@ export async function sendVerificationEmail(email:string,userName:string,verifyC
         await resend.emails.send({
             from: 'onboarding@resend.dev',
             to: email,
-            subject: 'Annonymous',
-            react: EmailTemplate({ firstName: 'John' }),
+            subject: 'Annonymous Verification Code',
+            react: EmailTemplate({ firstName: 'John',opt:verifyCode }),
           });
         return{success: true,
-            message: "string",}
+            message: "Verification Code Sent",}
             
     } catch (error) {
+        console.log(error)
         return{success:false,message:"Verification email send failed"}
     }
 }

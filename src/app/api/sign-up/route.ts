@@ -7,6 +7,7 @@ import { ApiResponse } from "@/types/apiResponse";
 export async function POST(request: Request) {
     try {
         await dbConnect()
+        
         const { username, email, password } = await request.json();
         const hashedPassword = await bcrypt.hash(password, 10);
         const verifyCode = Math.floor(100000 + Math.random() * 900000).toString()
@@ -52,7 +53,7 @@ export async function POST(request: Request) {
             })
     
         }
-        Response.json({ success: true, message: "User Registered sucessfully please check email" }, { status: 201 })
+        return Response.json({ success: true, message: "User Registered sucessfully please check email" }, { status: 201 })
     
     
     } catch (error) {

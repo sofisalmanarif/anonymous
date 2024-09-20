@@ -2,13 +2,15 @@ import * as React from 'react';
 
 interface EmailTemplateProps {
   firstName: string;
-  opt:string
+  otp:string
 }
 
 export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
   firstName,
+  otp
 }) => (
   <div>
-    <h1>Welcome, {firstName}!</h1>
+    <h1>Welcome, {firstName}! </h1>
+    <p>Your verification code is {otp}</p>
   </div>
 );

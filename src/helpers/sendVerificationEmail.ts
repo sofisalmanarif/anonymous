@@ -9,7 +9,7 @@ export async function sendVerificationEmail(email:string,username:string,verifyC
             from: 'onboarding@resend.dev',
             to: email,
             subject: 'Annonymous Verification Code',
-            react: EmailTemplate({ firstName: 'John',opt:verifyCode }),
+            react: EmailTemplate({ firstName: username,otp:verifyCode }),
           });
         return{success: true,
             message: "Verification Code Sent",}

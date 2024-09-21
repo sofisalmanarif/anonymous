@@ -64,6 +64,11 @@ const userSchema: Schema<User> = new Schema({
         default:true
 
     },
+    isVerified:{
+        type:Boolean,
+        default:false
+
+    },
     messages:[messageSchema]
 
 })

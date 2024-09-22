@@ -3,7 +3,7 @@ import { authOptions } from "../auth/[...nextauth]/options";
 import { userModel } from "@/models/user";
 import {User} from "next-auth"
 import dbConnect from "@/lib/db";
-import { connect } from "http2";
+
 export async function POST(req:Request){
     try {
         await dbConnect()

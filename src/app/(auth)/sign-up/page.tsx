@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { useDebounceValue } from 'usehooks-ts'
+import { useDebounceCallback, useDebounceValue } from 'usehooks-ts'
 import { useToast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
 import axios from 'axios'
@@ -31,7 +31,7 @@ const page = () => {
     const [isCheckingUsername, setIsCheckingUsername] = useState<boolean>(false)
     const [isSubmitttingForm, setIsSubmittingForm] = useState<boolean>(false)
 
-    const debouncedUsername = useDebounceValue(username, 500)
+    const debounced = useDebounceCallback(setUsername, 500)
     const {toast} = useToast()
     const router = useRouter()
 
@@ -75,11 +75,15 @@ const page = () => {
     }
     const isUsernameUnique = async ()=>{
         try {
+           if(username){
             setIsCheckingUsername(true)
             console.log("api calling")
-            const {data} = await axios.post("/api/unique-username",{debouncedUsername})
+            const {data} = await axios.post("/api/unique-username",{username})
             setUsernameMessage(data.message)
+            console.log(data)
+            console.log(usernameMessage==="Username is available")
             setIsCheckingUsername(false)
+           }
         } catch (error) {
             console.error("filed to fethch")
         }
@@ -87,16 +91,17 @@ const page = () => {
     }
     useEffect(()=>{
         isUsernameUnique()
-        console.log("loaded")
-    },[debouncedUsername])
+        console.log(username)
+        console.log(usernameMessage)
+    },[username])
 
 
     return (
         <div className="w-full min-h-screen flex items-center justify-center">
-           <div className="w-[25rem] px-16 ">
-            <h1>Sign-up</h1>
+           <div className="w-[30rem] p-10 border-2 rounded-md border-zinc-600 ">
+            <h1 className="text-4xl font-bold mb-10 text-center">Sign-up</h1>
             <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
           name="username"
@@ -105,14 +110,20 @@ const page = () => {
               <FormLabel>Username</FormLabel>
               <FormControl>
                 <Input placeholder="username" {...field} onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{
-                    field.onChange((e:React.ChangeEvent<HTMLInputElement>)=>setUsername(e.target.value))
+                    field.onChange(e); // Call the form handler provided by react-hook-form
+                    debounced(e.target.value);
                 }}/>
               </FormControl>
               
               <FormMessage />
             </FormItem>
           )}
-        />
+          />
+          
+
+<p className={`mt-10 text-xs ${usernameMessage=="Username is available" ? 'text-green-500' : 'text-red-500'}`}>
+  {usernameMessage}
+</p>
          <FormField
           control={form.control}
           name="email"

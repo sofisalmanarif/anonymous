@@ -1,20 +1,129 @@
 'use client'
-import { useSession, signIn, signOut } from "next-auth/react"
+"use client"
 
-export default function Component() {
-  const { data: session } = useSession()
-  if (session) {
+import { signUpSchema } from "@/schemas/signUpSchema"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { useDebounceCallback, useDebounceValue } from 'usehooks-ts'
+import { useToast } from "@/hooks/use-toast"
+import { useRouter } from "next/navigation"
+import axios from 'axios'
+import{
+Form,
+FormControl,
+FormDescription,
+FormField,
+FormItem,
+FormLabel,
+FormMessage,
+} from "@/components/ui/form"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import Link from "next/link"
+import { signInSchema } from "@/schemas/signInSchema"
+
+
+const formSchema = z.object({
+    signUpSchema: signUpSchema
+})
+const page = () => {
+
+    const [isSubmitttingForm, setIsSubmittingForm] = useState<boolean>(false)
+
+   
+    const {toast} = useToast()
+    const router = useRouter()
+
+    // zod implementation
+    const form = useForm<z.infer<typeof signInSchema>>({
+        resolver: zodResolver(signUpSchema),
+        defaultValues: {
+          email: "",
+            password: ""
+        },
+    })
+
+    async function onSubmit(values: z.infer<typeof signInSchema>) {
+
+        console.log(values)
+        setIsSubmittingForm(true)
+        try {
+            const {data} = await axios.post("/api/sign-in",values)
+            setIsSubmittingForm(false)
+            toast({
+                title: "Success",
+                description : data.message
+            })
+            router.replace(`/dashboard`)
+
+
+        } catch (error) {
+            console.error(error)
+            toast({
+                variant: "destructive",
+                title:"success",
+                description:"Sign Up failed"
+
+            })
+            setIsSubmittingForm(false)
+            
+        }
+        
+
+    }
+
+
     return (
-      <>
-        Signed in as {session.user.email} <br />
-        <button onClick={() => signOut()}>Sign out</button>
-      </>
+        <div className="w-full min-h-screen flex items-center justify-center">
+           <div className="w-[30rem] p-10 border-2 rounded-md border-zinc-600 ">
+            <h1 className="text-4xl font-bold mb-10 text-center">Sign In</h1>
+            <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        
+          
+
+
+
+         <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input type="email" placeholder="Email" {...field} />
+              </FormControl>
+              
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+         <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input placeholder="Password" {...field} />
+              </FormControl>
+              
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+       <div className="flex items-center justify-center">
+        <Button variant={"secondary"} type="submit">Submit</Button>
+        </div>
+        <p className="text-center text-xs">New member! <Link href={"/sign-up"} className="text-blue-500">Sign up</Link> </p>
+      </form>
+      </Form>
+
+          </div>
+        </div>
     )
-  }
-  return (
-    <>
-      Not signed in <br />
-      <button onClick={() => signIn()}>Sign in</button>
-    </>
-  )
 }
+
+export default page

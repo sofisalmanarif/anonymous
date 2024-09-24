@@ -20,6 +20,7 @@ FormMessage,
 } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import Link from "next/link"
 
 
 const formSchema = z.object({
@@ -152,7 +153,10 @@ const page = () => {
             </FormItem>
           )}
         />
-       <div className="flex items-center justify-center"> <Button type="submit">Submit</Button></div>
+       <div className="flex items-center justify-center">
+         <Button variant={"secondary"} type="submit">Submit</Button>
+         </div>
+         <p className="text-center text-xs">Already a member! <Link href={"/sign-in"} className="text-blue-500">Sign in</Link> </p>
       </form>
       </Form>
 

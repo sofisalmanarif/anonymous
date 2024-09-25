@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import { signInSchema } from "@/schemas/signInSchema"
+import { signIn } from "next-auth/react"
 
 
 const formSchema = z.object({
@@ -38,10 +39,10 @@ const page = () => {
 
     // zod implementation
     const form = useForm<z.infer<typeof signInSchema>>({
-        resolver: zodResolver(signUpSchema),
+        resolver: zodResolver(signInSchema),
         defaultValues: {
           email: "",
-            password: ""
+          password: ""
         },
     })
 
@@ -49,27 +50,28 @@ const page = () => {
 
         console.log(values)
         setIsSubmittingForm(true)
-        try {
-            const {data} = await axios.post("/api/sign-in",values)
-            setIsSubmittingForm(false)
-            toast({
-                title: "Success",
-                description : data.message
-            })
-            router.replace(`/dashboard`)
+        const response = await signIn("credentials",{
+          email:values.email,
+          password:values.password,
+          redirect:false
+        })
+        if (response?.error){
+          toast({
+            title:"Sign Failed",
+            description:"Invalid Credietials",
+            variant:"destructive"
+          })
 
-
-        } catch (error) {
-            console.error(error)
-            toast({
-                variant: "destructive",
-                title:"success",
-                description:"Sign Up failed"
-
-            })
-            setIsSubmittingForm(false)
-            
         }
+        if(response?.url){
+          toast({
+            title:"Sign Successfull",
+            description:"Welcome",
+            
+          })
+          router.replace("/dashboard")
+        }
+        console.log(response)
         
 
     }

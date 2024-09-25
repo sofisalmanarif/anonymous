@@ -34,7 +34,7 @@ const page = () => {
 
     // zod implementation
     const form = useForm<z.infer<typeof verificationCodeSchema>>({
-        resolver: zodResolver(signUpSchema),
+        resolver: zodResolver(verificationCodeSchema),
         defaultValues: {
             verificationCode: "",
         },

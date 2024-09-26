@@ -2,7 +2,7 @@
 import React from 'react'
 import { Button } from './ui/button'
 import Link from 'next/link'
-import { useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import { User } from 'next-auth'
 import { DividerHorizontalIcon } from '@radix-ui/react-icons'
 
@@ -16,8 +16,8 @@ const Navbar = () => {
     {
         data ?
         <div className='flex  items-center gap-5'>
-            <p>{data.user.username}</p>
-            <Button variant={'secondary'}>Log Out</Button>
+            <p>Welcome,{data.user.username}</p>
+            <Button onClick={()=>signOut()} variant={'secondary'}>Log Out</Button>
         </div> :
         <Button>log In</Button>
     }

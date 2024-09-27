@@ -48,7 +48,23 @@ const page = () => {
     }
 }, [setValue])
 
-  
+  const getAllMessages = async()=>{
+    setIsLoading(true)
+    try {
+      const {data } =await axios.get<ApiResponse>("/api/get-messages")
+      setMessages(data.messages || [])
+
+    } catch (error) {
+       const axiosError = error as AxiosError<ApiResponse>
+      toast({
+        title: "Error",
+        description: axiosError.message ||"Someting Went Wrong",
+        variant:'destructive'
+      })
+    }finally{
+      setIsLoading(false)
+    }
+  }
 useEffect(() => {
   fetchIsAcceptingMessages
 }, [])

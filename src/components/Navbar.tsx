@@ -17,9 +17,9 @@ const Navbar = () => {
         data ?
         <div className='flex  items-center gap-5'>
             <p>Welcome,{data.user.username}</p>
-            <Button onClick={()=>signOut()} variant={'secondary'}>Log Out</Button>
+            <Button onClick={()=>signOut()} >LogOut</Button>
         </div> :
-        <Button>log In</Button>
+        <Link href={"/sign-in"}><Button>LogIn</Button></Link>
     }
     
     </nav>

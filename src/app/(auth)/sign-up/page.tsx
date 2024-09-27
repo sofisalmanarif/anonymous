@@ -154,7 +154,7 @@ const page = () => {
           )}
         />
        <div className="flex items-center justify-center">
-         <Button variant={"secondary"} type="submit">Submit</Button>
+         <Button  type="submit">Submit</Button>
          </div>
          <p className="text-center text-xs">Already a member! <Link href={"/sign-in"} className="text-blue-500">Sign in</Link> </p>
       </form>

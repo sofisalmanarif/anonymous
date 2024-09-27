@@ -93,7 +93,7 @@ const page = () => {
                         />
 
                         <div className="flex items-center justify-center">
-                            <Button variant={"secondary"} type="submit">Verify</Button>
+                            <Button  type="submit">Verify</Button>
                         </div>
                     </form>
                 </Form>

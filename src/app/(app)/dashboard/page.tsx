@@ -1,3 +1,4 @@
+'use client'
 import MessageCard from '@/components/MessageCard'
 import React from 'react'
 

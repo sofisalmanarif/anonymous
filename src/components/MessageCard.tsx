@@ -20,8 +20,11 @@ import {
     AlertDialogTrigger,
   } from "@/components/ui/alert-dialog"
   import { Button } from "@/components/ui/button"
-
-const MessageCard = () => {
+type MessageCardprop = {
+message:string,
+deleteHandler :()=>void
+}
+const MessageCard = ({message,deleteHandler}:MessageCardprop) => {
   return (
     <Card className='w-[400px] bg-gray-800 text-white light:bg-black'>
   <CardHeader>

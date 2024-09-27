@@ -42,7 +42,7 @@ export async function GET(req:Request){
         }
         const isUserAcceptingMessage = loggedInUser.isAcceptionMessages
 
-        return Response.json({success:true,isUserAcceptingMessage:isUserAcceptingMessage},{status:200})
+        return Response.json({success:true,isAcceptiongMessages:isUserAcceptingMessage},{status:200})
     } catch (error) {
         console.log("Error while chacking accepting messages status",error)
         return Response.json({success:false,message:"Can't get Status"},{status:500})

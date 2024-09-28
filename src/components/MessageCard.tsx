@@ -29,8 +29,8 @@ const MessageCard = ({message,deleteHandler}:MessageCardprop) => {
   return (
     <Card className='w-[400px] bg-gray-800 text-white light:bg-black'>
   <CardHeader>
-    <CardTitle>Card Title</CardTitle>
-    <CardDescription>Card Description</CardDescription>
+    <CardTitle>{message.content}</CardTitle>
+    <CardDescription>{new Date(message.createdAt).toLocaleString()}</CardDescription>
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button variant="outline">Delete</Button>

@@ -120,7 +120,7 @@ const copyToClipboard = () => {
     <div className='flex gap-10 bg-slate-900 px-2 py-2 rounded-md'><Input type="email" className='outline-none border-none' value={profileUrl} placeholder="Email" disabled={true} />
       <Button onClick={copyToClipboard}>Copy</Button>
       </div>
-      <div className="flex items-center space-x-2 mt-2">
+      <div className="flex items-center space-x-2 mt-6">
       <Switch
           {...register('acceptMessages')}
           checked={acceptMessages}

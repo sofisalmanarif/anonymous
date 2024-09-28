@@ -13,6 +13,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
+import { User } from 'next-auth'
 
 const page = () => {
   const [messages, setMessages] = useState<Message[]>([])
@@ -24,7 +25,7 @@ const page = () => {
     setMessages(messages.filter(message => message._id !== messageId))
     console.log("first")
   }
-  const { data } = useSession()
+  const { data:session } = useSession()
 
   const form = useForm({
     resolver: zodResolver(acceptMessageSchema)
@@ -93,13 +94,29 @@ useEffect(() => {
   fetchIsAcceptingMessages
   getAllMessages
 }, [getAllMessages,fetchIsAcceptingMessages,setValue,messages])
-const url="hdggeggghgdhghsgag"
+if (!session || !session.user) {
+  return <div></div>;
+}
+
+const { username } = session.user as User;
+
+const baseUrl = `${window.location.protocol}//${window.location.host}`;
+const profileUrl = `${baseUrl}/u/${username}`;
+
+const copyToClipboard = () => {
+  navigator.clipboard.writeText(profileUrl);
+  toast({
+    title: 'URL Copied!',
+    description: 'Profile URL has been copied to clipboard.',
+  });
+};
+
   return (
     <div className='flex flex-col container mx-auto mt-10'>
       <h2 className='font-extrabold text-6xl'>User Dashboard</h2>
       <h4 className='font-semibold text-lg my-2'>Copy your unique Link</h4>
-    <div className='flex gap-10 bg-slate-900 px-2 py-2 rounded-md'><Input type="email" className='outline-none border-none' value={url} placeholder="Email" disabled={true} />
-      <Button>Copy</Button>
+    <div className='flex gap-10 bg-slate-900 px-2 py-2 rounded-md'><Input type="email" className='outline-none border-none' value={profileUrl} placeholder="Email" disabled={true} />
+      <Button onClick={copyToClipboard}>Copy</Button>
       </div>
       <div className="flex items-center space-x-2 mt-2">
       <Switch

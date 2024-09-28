@@ -1,5 +1,7 @@
 'use client'
 import MessageCard from '@/components/MessageCard'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { useToast } from '@/hooks/use-toast'
 import { Message } from '@/models/user'
 import { acceptMessageSchema } from '@/schemas/isAcceptingmessages'
@@ -9,7 +11,8 @@ import axios, { AxiosError } from 'axios'
 import { useSession } from 'next-auth/react'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-
+import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
 
 const page = () => {
   const [messages, setMessages] = useState<Message[]>([])
@@ -48,6 +51,27 @@ const page = () => {
     }
 }, [setValue])
 
+const handleSwitchChange = async () => {
+  try {
+    const response = await axios.post<ApiResponse>('/api/accept-message', {
+      acceptMessages: !acceptMessages,
+    });
+    setValue('acceptMessages', !acceptMessages);
+    toast({
+      title: response.data.message,
+      variant: 'default',
+    });
+  } catch (error) {
+    const axiosError = error as AxiosError<ApiResponse>;
+    toast({
+      title: 'Error',
+      description:
+        axiosError.response?.data.message ??
+        'Failed to update message settings',
+      variant: 'destructive',
+    });
+  }
+};
   const getAllMessages = async()=>{
     setIsLoading(true)
     try {
@@ -67,12 +91,31 @@ const page = () => {
   }
 useEffect(() => {
   fetchIsAcceptingMessages
-}, [])
-
+  getAllMessages
+}, [getAllMessages,fetchIsAcceptingMessages,setValue,messages])
+const url="hdggeggghgdhghsgag"
   return (
-    <div className='px-20 py-10 flex gap-10 flex-wrap'>
+    <div className='flex flex-col container mx-auto mt-10'>
+      <h2 className='font-extrabold text-6xl'>User Dashboard</h2>
+      <h4 className='font-semibold text-lg my-2'>Copy your unique Link</h4>
+    <div className='flex gap-10'><Input type="email" className='outline-none border-none' value={url} placeholder="Email" disabled={true} />
+      <Button>Copy</Button>
+      </div>
+      <div className="flex items-center space-x-2">
+      <Switch
+          {...register('acceptMessages')}
+          checked={acceptMessages}
+          onCheckedChange={handleSwitchChange}
+          disabled={isSwitchLoading}
+        />
+        <span className="ml-2">
+          Accept Messages: {acceptMessages ? 'On' : 'Off'}
+        </span>
+    </div>
+    <div className='container  py-10 flex gap-10 flex-wrap'>
       <MessageCard message="hay" deleteHandler={() => deleteHandler('2')} />
 
+    </div>
     </div>
   )
 }

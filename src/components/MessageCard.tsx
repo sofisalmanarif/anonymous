@@ -20,9 +20,10 @@ import {
     AlertDialogTrigger,
   } from "@/components/ui/alert-dialog"
   import { Button } from "@/components/ui/button"
+import { Message } from '@/models/user'
 type MessageCardprop = {
-message:string,
-deleteHandler :()=>void
+message:Message,
+deleteHandler :(messageId:string)=>void
 }
 const MessageCard = ({message,deleteHandler}:MessageCardprop) => {
   return (

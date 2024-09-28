@@ -98,10 +98,10 @@ const url="hdggeggghgdhghsgag"
     <div className='flex flex-col container mx-auto mt-10'>
       <h2 className='font-extrabold text-6xl'>User Dashboard</h2>
       <h4 className='font-semibold text-lg my-2'>Copy your unique Link</h4>
-    <div className='flex gap-10'><Input type="email" className='outline-none border-none' value={url} placeholder="Email" disabled={true} />
+    <div className='flex gap-10 bg-slate-900 px-2 py-2 rounded-md'><Input type="email" className='outline-none border-none' value={url} placeholder="Email" disabled={true} />
       <Button>Copy</Button>
       </div>
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-2 mt-2">
       <Switch
           {...register('acceptMessages')}
           checked={acceptMessages}
@@ -113,7 +113,9 @@ const url="hdggeggghgdhghsgag"
         </span>
     </div>
     <div className='container  py-10 flex gap-10 flex-wrap'>
-      <MessageCard message="hay" deleteHandler={() => deleteHandler('2')} />
+      {
+        messages.length >0 ?messages.map(message=>(<MessageCard message={message} deleteHandler={deleteHandler} />)) :<p> You dont have any messages right now</p>
+      }
 
     </div>
     </div>

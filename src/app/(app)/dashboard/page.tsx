@@ -52,7 +52,7 @@ const page = () => {
     }
 }, [setValue])
 
-const handleSwitchChange = async () => {
+const handleSwitchChange =useCallback(async () => {
   try {
     const response = await axios.post<ApiResponse>('/api/accept-message', {
       acceptMessages: !acceptMessages,
@@ -72,8 +72,8 @@ const handleSwitchChange = async () => {
       variant: 'destructive',
     });
   }
-};
-  const getAllMessages = async()=>{
+},[setValue]);
+  const getAllMessages = useCallback(async()=>{
     setIsLoading(true)
     try {
       const {data } =await axios.get<ApiResponse>("/api/get-messages")
@@ -89,11 +89,13 @@ const handleSwitchChange = async () => {
     }finally{
       setIsLoading(false)
     }
-  }
+  },[setValue])
 useEffect(() => {
-  fetchIsAcceptingMessages
-  getAllMessages
-}, [getAllMessages,fetchIsAcceptingMessages,setValue,messages])
+  
+  console.log(messages)
+  fetchIsAcceptingMessages()
+  getAllMessages()
+}, [setValue,getAllMessages,fetchIsAcceptingMessages])
 if (!session || !session.user) {
   return <div></div>;
 }

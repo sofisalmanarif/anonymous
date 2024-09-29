@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { signOut, useSession } from 'next-auth/react'
 import { User } from 'next-auth'
 import { DividerHorizontalIcon } from '@radix-ui/react-icons'
+import {ModeToggle} from "@/components/ModeToggle";
 
 const Navbar = () => {
     const {data,status} = useSession()
@@ -18,10 +19,12 @@ const Navbar = () => {
         <div className='flex  items-center gap-5'>
             <p>Welcome,{data.user.username}</p>
             <Button onClick={()=>signOut()} >LogOut</Button>
+            <ModeToggle/>
         </div> :
-        <Link href={"/sign-in"}><Button>LogIn</Button></Link>
+        <div className='flex items-center gap-2'><Link href={"/sign-in"}><Button>LogIn</Button></Link>
+    <ModeToggle/> 
+        </div>
     }
-    
     </nav>
   )
 }
